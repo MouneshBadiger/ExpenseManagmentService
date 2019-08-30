@@ -31,7 +31,7 @@ public class UserService {
 	}
 	public User findUserByUserName(String userName, String password) {
 		// TODO Auto-generated method stub
-		return userRepo.findUserByUserNameAndPassword(userName,password);
+		return userRepo.findByEmailIdAndPassword(userName,password);
 	}
 	
 

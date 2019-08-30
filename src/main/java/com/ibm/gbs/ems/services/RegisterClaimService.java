@@ -22,5 +22,17 @@ public class RegisterClaimService {
 	public ExpenseClaim getExpenseClaimId(String userId) {
 		return expenseClaimRepo.findById(userId).get();
 	}
+	public boolean approveClaim(String id) {
+		ExpenseClaim expenseClaim=expenseClaimRepo.findById(id).get();
+		expenseClaim.setStatus("approved");
+		expenseClaimRepo.save(expenseClaim);
+		return true;
+	}
+	public boolean rejectClaim(String id) {
+		ExpenseClaim expenseClaim=expenseClaimRepo.findById(id).get();
+		expenseClaim.setStatus("rejected");
+		expenseClaimRepo.save(expenseClaim);
+		return true;
+	}
 
 }

@@ -6,6 +6,6 @@ import com.ibm.gbs.ems.bo.User;
 
 public interface UserRepo extends MongoRepository<User, String>{
 	
-	User findUserByUserNameAndPassword(String userName,String password);
+	User findByEmailIdAndPassword(String userName,String password);
 
 }

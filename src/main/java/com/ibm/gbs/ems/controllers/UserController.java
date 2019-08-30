@@ -66,7 +66,7 @@ public class UserController {
 	public ResponseEntity<User> login(HttpServletRequest httpServletRequest){
 		URI uri=null;
 		try {
-			String userName=httpServletRequest.getParameter("userName");
+			String userName=httpServletRequest.getParameter("username");
 			String password=httpServletRequest.getParameter("password");
 			if(userName!=null && !userName.isEmpty() && password!=null && !password.isEmpty()) {
 				User u=userService.findUserByUserName(userName,password);
@@ -86,7 +86,7 @@ public class UserController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ResponseEntity.created(uri).build();
+		return ResponseEntity.notFound().build();
 		
 	}
 	@GetMapping("/user/{id}")
@@ -95,7 +95,7 @@ public class UserController {
 			if(id!=null && !id.isEmpty()) {
 				User u=userService.getUeserForId(id);
 				if(u!=null) {
-					return ResponseEntity.ok(u);
+					return ResponseEntity.status(HttpStatus.OK).header("message", "User retrieved successfully.").body(u);
 				}
 			}else  {
 				String errorMessage="ID can not be empty";

@@ -85,5 +85,45 @@ public class RegisterClaimController {
 		return ResponseEntity.notFound().build();
 		
 	}
+	@GetMapping("/expenseClaim/approve/{id}")
+	public ResponseEntity<String> approveClaim(@PathVariable String id){
+		try {
+			if(id!=null && !id.isEmpty()) {
+				boolean approved=registerClaimService.approveClaim(id);
+				if(approved) {
+					return ResponseEntity.ok("");
+				}
+			}else  {
+				String errorMessage="ID can not be empty";
+				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+						.header("message", errorMessage).build();
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.notFound().build();
+		
+	}
+	@GetMapping("/expenseClaim/reject/{id}")
+	public ResponseEntity<String> rejectClaim(@PathVariable String id){
+		try {
+			if(id!=null && !id.isEmpty()) {
+				boolean approved=registerClaimService.rejectClaim(id);
+				if(approved) {
+					return ResponseEntity.ok("");
+				}
+			}else  {
+				String errorMessage="ID can not be empty";
+				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
+						.header("message", errorMessage).build();
+			}
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return ResponseEntity.notFound().build();
+		
+	}
 
 }
