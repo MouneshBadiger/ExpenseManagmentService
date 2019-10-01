@@ -1,5 +1,7 @@
 package com.ibm.gbs.ems;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +18,12 @@ public class JWTUtils {
 	public  String signJWTToken(User user) {
 		String jwtToken=null;
 		try {
+			Date day7=new Date();
+			day7.setDate(day7.getDate()+7);
 		    Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
 		    jwtToken = JWT.create()
 		        .withIssuer("auth0")
+		        .withExpiresAt(day7)
 		        .sign(algorithm);
 		} catch (JWTCreationException e){
 		    //Invalid Signing configuration / Couldn't convert Claims.

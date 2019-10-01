@@ -41,15 +41,22 @@ public class UserController {
 		URI uri=null;
 		try {
 			if(user!=null && !errors.hasErrors()) {
-				User u=userService.saveUser(user);
-				if(u!=null) {
-					uri = new URI("");
-					String jwtToken=jWTUtils.signJWTToken(u);
-					HttpHeaders responseHeaders = new HttpHeaders();
-					responseHeaders.add("message", "Registration Successful");
-					responseHeaders.add("access_token",jwtToken);
-				    return new ResponseEntity<>(u, responseHeaders, HttpStatus.CREATED);
+				User dupUser=userService.findUserByUserEmailId(user.getEmailId());
+				if(dupUser==null || dupUser.getId().equals(user.getId()) ) {
+					User u=userService.saveUser(user);
+					if(u!=null) {
+						uri = new URI("");
+						String jwtToken=jWTUtils.signJWTToken(u);
+						HttpHeaders responseHeaders = new HttpHeaders();
+						responseHeaders.add("message", "Registration Successful");
+						responseHeaders.add("access_token",jwtToken);
+					    return new ResponseEntity<>(u, responseHeaders, HttpStatus.CREATED);
+					}
+				}else {
+					String errorMessage="User already exists";
+					return ResponseEntity.status(HttpStatus.CONFLICT).header("error", errorMessage).build();
 				}
+				
 			}else if(errors!=null) {
 				String errorMessage=errors.getAllErrors().stream().map(p->p.getDefaultMessage()).collect(Collectors.joining(","));
 				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)

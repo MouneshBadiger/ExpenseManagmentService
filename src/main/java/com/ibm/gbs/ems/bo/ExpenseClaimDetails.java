@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,12 +14,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ExpenseClaimDetails  implements Serializable{
-	
+	@Id
 	private String id;
 	
 	private String expenseDetailName;
 	private String description;
 	private String typeOfExpense;
+	private String expenseAmount;
 	private String paymentMode;
 	
 	private ExpenseClaim expenseClaimId;

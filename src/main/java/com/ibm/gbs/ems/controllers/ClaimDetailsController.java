@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
@@ -26,25 +27,30 @@ public class ClaimDetailsController {
 	ClaimDetailsService claimDetailsService;
 	
 	@PostMapping("/expenseClaimDetails")
-	public ResponseEntity<String> upsertUser(@Valid @RequestBody ExpenseClaimDetails expenseClaimDetails,Errors errors){
-		URI uri=null;
+	public String upsertUser(@Valid @RequestBody ExpenseClaimDetails expenseClaimDetails,Errors errors){
 		try {
 			if(expenseClaimDetails!=null && !errors.hasErrors()) {
-				ExpenseClaimDetails u=claimDetailsService.saveExpenseClaim(expenseClaimDetails);
-				if(u!=null) {
-					uri = new URI("");
-					return ResponseEntity.created(uri).header("message", "Expense Claim created successfully with ID:"+u.getId()).build();
+				
+				String valStr=claimDetailsService.validateClaimDetails(expenseClaimDetails);
+				if(valStr.isEmpty()) {
+					ExpenseClaimDetails u=claimDetailsService.saveExpenseClaim(expenseClaimDetails);
+					if(u!=null) {
+						String message="Claim Details Added";
+						return message;
+					}
+				}else {
+				   return valStr;
 				}
+				
 			}else if(errors!=null) {
 				String errorMessage=errors.getAllErrors().stream().map(p->p.getDefaultMessage()).collect(Collectors.joining(","));
-				return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED)
-						.header("message", errorMessage).build();
+				return errorMessage;
 			}
 		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ResponseEntity.created(uri).build();
+		return "error";
 		
 	}
 	@GetMapping("/expenseClaimDetails/{id}")

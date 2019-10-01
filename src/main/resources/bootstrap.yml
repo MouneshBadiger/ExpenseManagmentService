@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: expense-service
+  cloud:
+    config:
+      uri: http://localhost:9999
+eureka:
+  client:
+    enabled: true      instance:    ip-address: true
+   
